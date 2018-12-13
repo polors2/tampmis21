@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <center><h1>logo here</h1>
+    <h1>this is the login path and the root path</h1>
+</br>
+<h1>LOGIN</h1>
+<%= form_for(:session, url: login_path) do |s| %>
+  <p>
+    <%= s.label :email %>
+    <%= s.email_field :email, placeholder: "email@email.com" %>
+  </p>
+  <p>
+    <%= s.label :password %>
+    <%= s.password_field :password, autocomplete: "off" %>
+  </p>
+  <p>
+      <%= s.submit "Login as Seller" %>
+      <%= s.submit "Login as Buyer" %>
+      <%= s.submit "Login as Administrator" %>
+<% end %>
+    <%= link_to 'Register as a Seller', new_seller_url %>
+    <%= link_to 'Register as a Buyer', new_buyer_url %>
+    </br>
+    <%if session[:user_id] = !nil %>
+        <h1>LOGOUT (if logged in)</h1>
+<%= link_to 'LOGOUT', logout_path, method: :delete %>
+<%end%>
+</br>
+<h1>AVAILABLE PRODUCTS</h1>
+      <% Sale.find_each do |sale| %>
+      <% if sale.buyer_id = !nil %>
+            </br>
+      <p>Product Type: <%=Category.find(Product.find(sale.product_id).category_id).name%></p>
+      <p>Product: <%=Product.find(sale.product_id).name%></p>
+      <p>Price: <%=sale.price%></p>
+      <% if Buyer.find_by(id:session[:user_id]) %>
+      <h1>buyer logged in</h1>
+      <h1>buyer: <%=Buyer.find(session[:user_id]).email%></h1>
+      <%= button_to "New", action: "new" %>
+      <%end%>
+      <%end%>
+      <%end%>
+
+
+    </center>
+  </body>
+</html>
